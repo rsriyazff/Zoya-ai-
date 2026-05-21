@@ -163,8 +163,12 @@ class ZoyaViewModel(application: Application) : AndroidViewModel(application) {
                         val intent = getIntentForApp(appName)
                         if (intent != null) {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            getApplication<Application>().startActivity(intent)
-                            resultMessage = "Successfully opened $appName"
+                            try {
+                                getApplication<Application>().startActivity(intent)
+                                resultMessage = "Successfully opened $appName"
+                            } catch (e: Exception) {
+                                resultMessage = "Failed to open $appName"
+                            }
                         } else {
                             resultMessage = "Could not find app $appName"
                         }

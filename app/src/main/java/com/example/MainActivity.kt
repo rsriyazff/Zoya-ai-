@@ -36,11 +36,12 @@ import android.content.Context
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MicOff
 import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material.icons.filled.VideocamOff
-import androidx.compose.material.icons.filled.ScreenShare
-import androidx.compose.material.icons.filled.StopScreenShare
+import androidx.compose.material.icons.automirrored.filled.ScreenShare
+import androidx.compose.material.icons.automirrored.filled.StopScreenShare
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -56,20 +57,19 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 val recordAudioPermission = rememberPermissionState(Manifest.permission.RECORD_AUDIO)
-                
-                LaunchedEffect(Unit) {
-                    if (!recordAudioPermission.status.isGranted) {
-                        recordAudioPermission.launchPermissionRequest()
-                    }
-                }
-
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     ZoyaScreen(
                         appState = viewModel.appState.collectAsState().value,
-                        onPressMic = { viewModel.startListening() },
+                        onPressMic = { 
+                            if (!recordAudioPermission.status.isGranted) {
+                                recordAudioPermission.launchPermissionRequest()
+                            } else {
+                                viewModel.startListening() 
+                            }
+                        },
                         onReleaseMic = { viewModel.stopListeningAndSend() }
                     )
                 }
@@ -175,7 +175,7 @@ fun ZoyaScreen(
                         )
                 ) {
                     Icon(
-                        imageVector = if (isScreenSharing) Icons.Default.ScreenShare else Icons.Default.StopScreenShare,
+                        imageVector = if (isScreenSharing) Icons.AutoMirrored.Filled.ScreenShare else Icons.AutoMirrored.Filled.StopScreenShare,
                         contentDescription = "Screen Share",
                         tint = if (isScreenSharing) GlowNeon else Color.White.copy(alpha = 0.7f),
                         modifier = Modifier.size(28.dp)
