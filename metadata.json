@@ -1,0 +1,6 @@
+{
+  "name": "Zoya AI Assistant",
+  "description": "A real-time, voice-to-voice AI assistant mobile app with a sassy personality and futuristic UI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
